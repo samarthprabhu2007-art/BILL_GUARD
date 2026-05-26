@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SubTrackr</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h1>SubTrackr 💳</h1>
+  <p>Track your monthly subscriptions</p>
+  <br>
+  <hr>
+  <br>
+  <!-- Summary -->
+  <div class="summary">
+    <div class="box">
+      <p>Total Monthly</p>
+      <h2>₹1,249</h2>
+    </div>
+    <div class="box">
+      <p>Active</p>
+      <h2>5</h2>
+    </div>
+    <div class="box red">
+      <p>Due Soon</p>
+      <h2>2</h2>
+    </div>
+
+  </div>
+<br>
+  <hr>
+
+  <!-- Add Form -->
+  <h3>Add New Subscription</h3>
+  <br>
+  <div class="form">
+    <input type="text" placeholder="Service name (e.g. Netflix)" />
+    <input type="number" placeholder="Amount in ₹" />
+    <input type="date" />
+    <select>
+      <option>-- Category --</option>
+      <option>Streaming</option>
+      <option>Music</option>
+      <option>Utility</option>
+      <option>Gaming</option>
+      <option>Other</option>
+    </select>
+    <button>Add</button>
+  </div>
+  <br>
+  <hr>
+
+  <!-- List -->
+  <h3>My Subscriptions</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td> Netflix</td>
+        <td>₹499</td>
+        <td>1 Jun 2025</td>
+        <td><span class="orange">Due Soon</span></td>
+        <td><button class="del">✕</button></td>
+      </tr>
+      <tr>
+        <td> Spotify</td>
+        <td>₹119</td>
+        <td>5 Jun 2025</td>
+        <td><span class="orange">Due Soon</span></td>
+        <td><button class="del">✕</button></td>
+      </tr>
+      <tr>
+        <td> Google One</td>
+        <td>₹130</td>
+        <td>15 Jun 2025</td>
+        <td><span class="green">Active</span></td>
+        <td><button class="del">✕</button></td>
+      </tr>
+      <tr>
+        <td> Xbox Pass</td>
+        <td>₹399</td>
+        <td>20 Jun 2025</td>
+        <td><span class="green">Active</span></td>
+        <td><button class="del">✕</button></td>
+      </tr>
+      <tr>
+        <td> Electricity</td>
+        <td>₹102</td>
+        <td>25 Jun 2025</td>
+        <td><span class="green">Active</span></td>
+        <td><button class="del">✕</button></td>
+      </tr>
+    </tbody>
+  </table>
+<br>
+  <hr>
+  <p style="text-align:center; color:gray; font-size:13px;">SubTrackr © 2025</p>
+
+</body>
+</html>
