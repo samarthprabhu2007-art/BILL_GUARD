@@ -2,109 +2,116 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>SubTrackr</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SubTrackr – Dashboard</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <h1>SubTrackr 💳</h1>
-  <p>Track your monthly subscriptions</p>
-  <br>
-  <hr>
-  <br>
-  <!-- Summary -->
-  <div class="summary">
-    <div class="box">
-      <p>Total Monthly</p>
-      <h2>₹1,249</h2>
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">SubTrackr 💳</div>
+    <div class="nav-right">
+      <span class="user-name" id="nav-username"></span>
+      <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
-    <div class="box">
-      <p>Active</p>
-      <h2>5</h2>
-    </div>
-    <div class="box red">
-      <p>Due Soon</p>
-      <h2>2</h2>
-    </div>
-
   </div>
-<br>
-  <hr>
 
-  <!-- Add Form -->
-  <h3>Add New Subscription</h3>
-  <br>
-  <div class="form">
-    <input type="text" placeholder="Service name (e.g. Netflix)" />
-    <input type="number" placeholder="Amount in ₹" />
-    <input type="date" />
-    <select>
-      <option>-- Category --</option>
-      <option>Streaming</option>
-      <option>Music</option>
-      <option>Utility</option>
-      <option>Gaming</option>
-      <option>Other</option>
-    </select>
-    <button>Add</button>
+  <div class="main">
+
+    <!-- Summary Cards -->
+    <div class="summary">
+      <div class="card">
+        <div class="label">Total Monthly</div>
+        <div class="value" id="total-amount">₹0</div>
+      </div>
+      <div class="card">
+        <div class="label">Active Subs</div>
+        <div class="value" id="total-subs">0</div>
+      </div>
+      <div class="card red-card">
+        <div class="label">⚠️ Due Soon</div>
+        <div class="value" id="due-soon-count">0</div>
+      </div>
+    </div>
+
+    <!-- Add Subscription -->
+    <p class="section-title">➕ Add New Subscription</p>
+    <div class="form-box">
+      <div class="form-grid">
+        <div>
+          <label>Service Name</label>
+          <input type="text" id="sub-name" placeholder="e.g. Netflix" />
+          <div class="form-error" id="err-name">Service name is required.</div>
+        </div>
+        <div>
+          <label>Amount (₹)</label>
+          <input type="number" id="sub-amount" placeholder="e.g. 499" min="1" />
+          <div class="form-error" id="err-amount">Enter a valid amount greater than 0.</div>
+        </div>
+        <div>
+          <label>Billing Cycle</label>
+          <select id="sub-cycle" onchange="handleCycleChange()">
+            <option value="">-- Select Cycle --</option>
+            <option value="one-time">🔂 One Time</option>
+            <option value="monthly">📅 Monthly</option>
+            <option value="per-15">⏱️ Every 15 Days</option>
+            <option value="per-6months">📆 Every 6 Months</option>
+          </select>
+          <div class="form-error" id="err-cycle">Please select a billing cycle.</div>
+        </div>
+        <div>
+          <label>Start / Due Date</label>
+          <input type="date" id="sub-date" />
+          <div class="form-error" id="err-date">Please select a date.</div>
+        </div>
+        <div>
+          <label>Category</label>
+          <select id="sub-category">
+            <option value="">-- Select Category --</option>
+            <option value="Streaming">🎬 Streaming</option>
+            <option value="Music">🎵 Music</option>
+            <option value="Utility">💡 Utility</option>
+            <option value="Gaming">🎮 Gaming</option>
+            <option value="Software">☁️ Software</option>
+            <option value="Other">📦 Other</option>
+          </select>
+          <div class="form-error" id="err-category">Please select a category.</div>
+        </div>
+      </div>
+      <button class="add-btn" onclick="addSubscription()">+ Add Subscription</button>
+    </div>
+
+    <!-- Subscriptions Table -->
+    <div class="table-box">
+      <div class="table-header">
+        <p class="section-title" style="margin:0">📋 My Subscriptions</p>
+      </div>
+      <div id="table-container">
+        <div class="empty-msg" id="empty-msg">No subscriptions yet. Add one above!</div>
+        <table id="sub-table" style="display:none;">
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>Category</th>
+              <th>Amount</th>
+              <th>Cycle</th>
+              <th>Next Due</th>
+              <th>Status</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody id="sub-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer">SubTrackr © 2025 · Never miss a payment again</div>
   </div>
-  <br>
-  <hr>
 
-  <!-- List -->
-  <h3>My Subscriptions</h3>
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Amount</th>
-        <th>Due Date</th>
-        <th>Status</th>
-        <th>Remove</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td> Netflix</td>
-        <td>₹499</td>
-        <td>1 Jun 2025</td>
-        <td><span class="orange">Due Soon</span></td>
-        <td><button class="del">✕</button></td>
-      </tr>
-      <tr>
-        <td> Spotify</td>
-        <td>₹119</td>
-        <td>5 Jun 2025</td>
-        <td><span class="orange">Due Soon</span></td>
-        <td><button class="del">✕</button></td>
-      </tr>
-      <tr>
-        <td> Google One</td>
-        <td>₹130</td>
-        <td>15 Jun 2025</td>
-        <td><span class="green">Active</span></td>
-        <td><button class="del">✕</button></td>
-      </tr>
-      <tr>
-        <td> Xbox Pass</td>
-        <td>₹399</td>
-        <td>20 Jun 2025</td>
-        <td><span class="green">Active</span></td>
-        <td><button class="del">✕</button></td>
-      </tr>
-      <tr>
-        <td> Electricity</td>
-        <td>₹102</td>
-        <td>25 Jun 2025</td>
-        <td><span class="green">Active</span></td>
-        <td><button class="del">✕</button></td>
-      </tr>
-    </tbody>
-  </table>
-<br>
-  <hr>
-  <p style="text-align:center; color:gray; font-size:13px;">SubTrackr © 2025</p>
-
+  <script src="script.js"></script>
 </body>
 </html>
