@@ -1,0 +1,145 @@
+/* ==== Global ==== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(135deg, #0d0d1a, #1a1a33);
+  color: #e0e0ff;
+  overflow-x: hidden;
+}
+
+/* ==== Navbar ==== */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.navbar h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.navbar a {
+  color: #a0b8ff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.navbar a:hover {
+  color: #fff;
+}
+
+/* ==== Glass Card ==== */
+.glass-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  max-width: 400px;
+  width: 90%;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  text-align: center;
+}
+
+.glass-card h2 {
+  margin-bottom: 1rem;
+  font-size: 1.9rem;
+  color: #fff;
+}
+
+.glass-card p {
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  color: #d0d0ff;
+}
+
+/* ==== CTA button ==== */
+.cta-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(45deg, #4b6cb7, #182848);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+/* ==== Hero Section ==== */
+.hero {
+  display: flex;
+  height: calc(100vh - 68px); /* subtract navbar height */
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==== Centered page (login) ==== */
+.centered {
+  display: flex;
+  height: calc(100vh - 68px);
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==== Form styling ==== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+form label {
+  text-align: left;
+  font-weight: 600;
+  color: #c0c8ff;
+  margin-left: 0.2rem;
+}
+
+form input {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  backdrop-filter: blur(4px);
+  transition: border-color 0.2s;
+}
+
+form input:focus {
+  outline: none;
+  border-color: #4b6cb7;
+}
+
+/* ==== Responsive ==== */
+@media (max-width: 480px) {
+  .navbar {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .hero, .centered {
+    height: auto;
+    padding: 2rem 0;
+  }
+}
