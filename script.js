@@ -184,6 +184,13 @@ function loadSubs(email) {
 
 function saveSubs(email, subs) {
   localStorage.setItem(getSubKey(email), JSON.stringify(subs));
+  
+  // Sync to MongoDB in the background
+  fetch('/api/subs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, subs })
+  }).catch(e => console.error("Failed to sync to DB:", e));
 }
 
 // Cycle display labels
@@ -277,11 +284,22 @@ function updateSummary(subs) {
   document.getElementById("due-soon-count").textContent = dueSoon;
 }
 
-function initDashboard() {
+async function initDashboard() {
   const session = getSession();
   if (!session) { window.location.href = "login.html"; return; }
 
   document.getElementById("nav-username").textContent = "👋 " + session.name;
+
+  try {
+    // Pull the latest data from MongoDB
+    const res = await fetch('/api/subs?email=' + encodeURIComponent(session.email));
+    if (res.ok) {
+      const dbSubs = await res.json();
+      localStorage.setItem(getSubKey(session.email), JSON.stringify(dbSubs));
+    }
+  } catch (e) {
+    console.error("Failed to sync from DB, using local data", e);
+  }
 
   const subs = loadSubs(session.email);
   renderTable(subs);
