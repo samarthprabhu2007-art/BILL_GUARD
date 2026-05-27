@@ -36,14 +36,23 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "POST") {
-      const data = req.body; // expects JSON {name, email}
-      if (!data?.name || !data?.email) {
-        res.status(400).json({ error: "Name and email are required" });
+      const data = req.body; // expects JSON {name, email, password}
+      if (!data?.name || !data?.email || !data?.password) {
+        res.status(400).json({ error: "Name, email, and password are required" });
         return;
       }
+
+      // Check if user already exists
+      const existing = await collection.findOne({ email: data.email.toLowerCase() });
+      if (existing) {
+        res.status(409).json({ error: "Account already exists" });
+        return;
+      }
+
       const result = await collection.insertOne({
         name: data.name,
-        email: data.email,
+        email: data.email.toLowerCase(),
+        password: data.password, // Plain text for simplicity
         createdAt: new Date(),
       });
       res.status(201).json({ insertedId: result.insertedId });

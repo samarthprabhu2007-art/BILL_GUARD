@@ -53,7 +53,7 @@ function showTab(tab) {
 //  AUTH — SIGNUP
 // =============================================
 
-function handleSignup() {
+async function handleSignup() {
   const name    = document.getElementById("signup-name").value.trim();
   const email   = document.getElementById("signup-email").value.trim();
   const pass    = document.getElementById("signup-pass").value;
@@ -87,23 +87,23 @@ function handleSignup() {
 
   if (!valid) return;
 
-  // Check if account already exists
-  const users = JSON.parse(localStorage.getItem("subtrackr_users") || "{}");
-  if (users[email.toLowerCase()]) {
-    showAlert("An account with this email already exists. Please login.", "error");
+  try {
+    const res = await fetch('/api/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password: pass })
+    });
+    
+    if (!res.ok) {
+      const err = await res.json();
+      showAlert(err.error || "Signup failed", "error");
+      return;
+    }
+  } catch (e) {
+    console.error(e);
+    showAlert("Database error. Please try again.", "error");
     return;
   }
-
-  // Save user to local storage (so login still works as before)
-  users[email.toLowerCase()] = { name, email, password: pass };
-  localStorage.setItem("subtrackr_users", JSON.stringify(users));
-
-  // ALSO save to MongoDB via our new Vercel API
-  fetch('/api/users', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, email })
-  }).catch(e => console.error("MongoDB error:", e));
 
   showAlert("Account created! You can now login.", "success");
   setTimeout(() => showTab("login"), 1500);
@@ -114,7 +114,7 @@ function handleSignup() {
 //  AUTH — LOGIN
 // =============================================
 
-function handleLogin() {
+async function handleLogin() {
   const email = document.getElementById("login-email").value.trim();
   const pass  = document.getElementById("login-pass").value;
 
@@ -132,23 +132,32 @@ function handleLogin() {
 
   if (!valid) return;
 
-  const users = JSON.parse(localStorage.getItem("subtrackr_users") || "{}");
-  const user  = users[email.toLowerCase()];
-
-  if (!user) {
-    showAlert("No account found with this email. Please sign up.", "error");
-    return;
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password: pass })
+    });
+    
+    if (!res.ok) {
+      const err = await res.json();
+      if (err.error && err.error.includes("password")) {
+        setInputError("login-pass", true);
+      }
+      showAlert(err.error || "Login failed", "error");
+      return;
+    }
+    
+    const user = await res.json();
+    
+    // Save session in local storage
+    localStorage.setItem("subtrackr_session", JSON.stringify({ email: user.email, name: user.name }));
+    window.location.href = "index.html";
+    
+  } catch (e) {
+    console.error(e);
+    showAlert("Database error. Please try again.", "error");
   }
-
-  if (user.password !== pass) {
-    showAlert("Wrong password. Please try again.", "error");
-    setInputError("login-pass", true);
-    return;
-  }
-
-  // Save session
-  localStorage.setItem("subtrackr_session", JSON.stringify({ email: email.toLowerCase(), name: user.name }));
-  window.location.href = "index.html";
 }
 
 
