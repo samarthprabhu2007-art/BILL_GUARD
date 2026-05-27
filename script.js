@@ -94,9 +94,16 @@ function handleSignup() {
     return;
   }
 
-  // Save user
+  // Save user to local storage (so login still works as before)
   users[email.toLowerCase()] = { name, email, password: pass };
   localStorage.setItem("subtrackr_users", JSON.stringify(users));
+
+  // ALSO save to MongoDB via our new Vercel API
+  fetch('/api/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email })
+  }).catch(e => console.error("MongoDB error:", e));
 
   showAlert("Account created! You can now login.", "success");
   setTimeout(() => showTab("login"), 1500);
