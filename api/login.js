@@ -3,14 +3,24 @@ import { MongoClient } from "mongodb";
 let cachedClient = null;
 
 async function getClient() {
-  if (cachedClient) return cachedClient;
+  // If we have a cached client, verify it's still connected
+  if (cachedClient) {
+    try {
+      await cachedClient.db().command({ ping: 1 });
+      return cachedClient;
+    } catch {
+      // Connection is stale — close it and reconnect
+      cachedClient = null;
+    }
+  }
+
   const uri = process.env.MONGODB_URI;
   if (!uri) throw new Error("MONGODB_URI missing");
+
+  // useUnifiedTopology and useNewUrlParser were removed in mongodb driver v4+
   const client = new MongoClient(uri, {
     maxPoolSize: 10,
     minPoolSize: 0,
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
   });
   await client.connect();
   cachedClient = client;
