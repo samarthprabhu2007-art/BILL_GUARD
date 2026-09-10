@@ -172,18 +172,15 @@ The application uses:
 
 ## 🔒 Security
 
-> ⚠️ **Current status:** Passwords are currently stored in plain text for simplicity.
+> ✅ **Current status:** User passwords are secure.
 
-This project is currently intended as a learning/personal project.
+This project implements industry-standard security practices for authentication:
 
-A future update will improve authentication security by:
+* **Password Hashing:** Passwords are securely hashed using `bcryptjs` before being stored in MongoDB.
+* **Salted Hashes:** Each password hash is salted to protect against rainbow table attacks.
+* **Secure Comparison:** Authentication uses `bcrypt.compare` to prevent timing attacks.
 
-* Hashing passwords using a library such as `bcrypt`
-* Improving session management
-* Adding stronger authentication practices
-* Protecting API endpoints more securely
-
-**Do not use the current authentication implementation for sensitive or production applications.**
+*Note: Session management is currently handled via localStorage. A future update will migrate to secure HttpOnly cookies or JWTs.*
 
 ---
 
@@ -191,8 +188,7 @@ A future update will improve authentication security by:
 
 Some features planned for future versions:
 
-* 🔐 Secure password hashing
-* 🔑 Better authentication and session management
+* 🔑 Enhanced session management (JWT / HttpOnly cookies)
 * 📧 Email reminders for upcoming payments
 * 🔔 Push notifications
 * 📈 Spending analytics and charts
