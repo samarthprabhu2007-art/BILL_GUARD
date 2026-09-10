@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import bcrypt from "bcryptjs";
 
 let cachedClient = null;
 
@@ -55,10 +56,14 @@ export default async function handler(req, res) {
         return;
       }
 
+      // --- HASHING THE PASSWORD ---
+      // '10' is the number of "salt rounds". It determines how slow/secure the hashing is.
+      const hashedPassword = await bcrypt.hash(data.password, 10);
+
       const result = await collection.insertOne({
         name: data.name,
         email: data.email.toLowerCase(),
-        password: data.password, // Plain text for simplicity
+        password: hashedPassword, // Store the HASH, not the plain text!
         createdAt: new Date(),
       });
       res.status(201).json({ insertedId: result.insertedId });

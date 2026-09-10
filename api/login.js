@@ -1,4 +1,5 @@
 import { MongoClient } from "mongodb";
+import bcrypt from "bcryptjs";
 
 let cachedClient = null;
 
@@ -47,7 +48,11 @@ export default async function handler(req, res) {
       return res.status(404).json({ error: "No account found with this email. Please sign up." });
     }
 
-    if (user.password !== password) {
+    // --- COMPARING THE PASSWORD ---
+    // We use bcrypt.compare to securely check if the text matches the hash
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
       return res.status(401).json({ error: "Wrong password. Please try again." });
     }
 
